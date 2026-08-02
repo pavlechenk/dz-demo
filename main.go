@@ -18,16 +18,16 @@ const (
 
 
 func main() {
-	sourceCurrency := readCurrency()
-	destinationCurrency := readCurrency()
+	sourceCurrency := readCurrency("исходную")
+	destinationCurrency := readCurrency("целевую")
 	amount := readAmount(sourceCurrency)
 	convertCurrency(amount, sourceCurrency, destinationCurrency)
 }
 
-func readCurrency() string {
+func readCurrency(role string) string {
 	var currency string
 	for {
-		fmt.Print("Введите предложенную валюту USD/EUR/RUB: ")
+		fmt.Printf("Введите %s валюту USD/EUR/RUB: ", role)
 		fmt.Scan(&currency)
 		currency = strings.ToLower(strings.TrimSpace(currency))
 		if checkCurrency(currency) {
@@ -68,19 +68,21 @@ func checkCurrency(currency string) bool {
 func convertCurrency(amount float64, from, to string) {
 	switch {
 		case from == "usd" && to == "rub":
-			fmt.Printf("Сумма USD в RUB: %f\n", amount * UsdToRub)
+			fmt.Printf("Сумма USD в RUB: %.2f\n", amount * UsdToRub)
 		case from == "eur" && to == "rub":
-			fmt.Printf("Сумма EUR в RUB: %f\n", amount * EurToRub)
+			fmt.Printf("Сумма EUR в RUB: %.2f\n", amount * EurToRub)
 		case from == "eur" && to == "usd":
-			fmt.Printf("Сумма EUR в USD: %f\n", amount * EurToUsd)
+			fmt.Printf("Сумма EUR в USD: %.2f\n", amount * EurToUsd)
 		case from == "usd" && to == "eur":
-			fmt.Printf("Сумма USD в EUR: %f\n", amount * UsdToEur)
+			fmt.Printf("Сумма USD в EUR: %.2f\n", amount * UsdToEur)
 		case from == "rub" && to == "usd":
-			fmt.Printf("Сумма RUB в USD: %f\n", amount * RubToUsd)
+			fmt.Printf("Сумма RUB в USD: %.2f\n", amount * RubToUsd)
 		case from == "rub" && to == "eur":
-			fmt.Printf("Сумма RUB в EUR: %f\n", amount * RubToEur)
+			fmt.Printf("Сумма RUB в EUR: %.2f\n", amount * RubToEur)
+		case from == to:
+			fmt.Printf("Сумма %s в %s: %.2f\n", from, to, amount)
 		default: {
-			fmt.Printf("Переданы неравильные валюты")
+			fmt.Printf("Переданы неправильные валюты")
 		}
 	}
 }
