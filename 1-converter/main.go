@@ -20,6 +20,9 @@ func main() {
 		"usdeur": 0.867115,
 		"rubusd": 0.012584,
 		"rubeur": 0.010966,
+		"usdusd": 1.0,
+		"rubrub": 1.0,
+		"eureur": 1.0,
 	}
 	convertCurrency(amount, sourceCurrency, destinationCurrency, currencies)
 }
