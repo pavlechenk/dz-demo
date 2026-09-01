@@ -24,7 +24,7 @@ func main() {
 		"rubrub": 1.0,
 		"eureur": 1.0,
 	}
-	convertCurrency(amount, sourceCurrency, destinationCurrency, currencies)
+	convertCurrency(amount, sourceCurrency, destinationCurrency, &currencies)
 }
 
 func readCurrency(role string) string {
@@ -68,7 +68,7 @@ func checkCurrency(currency string) bool {
 	return currency == "usd" || currency == "eur" || currency == "rub" 
 }
 
-func convertCurrency(amount float64, from, to string, currencies currency) {
+func convertCurrency(amount float64, from, to string, currencies *currency) {
 	key := from + to
-	fmt.Printf("Сумма %s в %s: %.2f\n", from, to, amount * currencies[key])
+	fmt.Printf("Сумма %s в %s: %.2f\n", from, to, amount * (*currencies)[key])
 }
