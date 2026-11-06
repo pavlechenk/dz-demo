@@ -20,7 +20,7 @@ func (storage Storage) GetBins() (*bins.BinList, error) {
 	data, err := os.ReadFile(storage.filePath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return &bins.BinList{}, err
+			return &bins.BinList{}, nil
 		}
 		return nil, err
 	}
@@ -41,6 +41,7 @@ func (storage Storage) SaveBin(bin *bins.BinList) error {
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 	_, err = file.WriteString(string(data))
 	if err != nil {
 		return err
