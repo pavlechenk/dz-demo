@@ -10,7 +10,7 @@ type Storage struct {
 	filePath string
 }
 
-func (storage Storage) NewStorage(dir string) *Storage {
+func NewStorage(dir string) *Storage {
 	return &Storage{
 		filePath: dir,
 	}
@@ -32,7 +32,7 @@ func (storage Storage) GetBins() (*bins.BinList, error) {
 	return &binList, nil
 }
 
-func (storage Storage) SaveBin(bin *bins.Bin) error {
+func (storage Storage) SaveBin(bin *bins.BinList) error {
 	data, err := json.Marshal(bin)
 	if err != nil {
 		return err
