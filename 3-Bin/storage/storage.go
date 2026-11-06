@@ -37,7 +37,7 @@ func (storage Storage) SaveBin(bin *bins.Bin) error {
 	if err != nil {
 		return err
 	}
-	file, err := os.Create(storage.filePath)
+	file, err := os.OpenFile(storage.filePath, os.O_APPEND, os.FileMode(os.O_CREATE))
 	if err != nil {
 		return err
 	}
