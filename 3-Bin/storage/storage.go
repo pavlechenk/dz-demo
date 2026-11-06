@@ -2,7 +2,9 @@ package storage
 
 import (
 	"encoding/json"
+	"errors"
 	"json-cloud-cli/bins"
+	"json-cloud-cli/file"
 	"os"
 )
 
@@ -17,11 +19,11 @@ func NewStorage(dir string) *Storage {
 }
 
 func (storage Storage) GetBins() (*bins.BinList, error) {
-	data, err := os.ReadFile(storage.filePath)
+	if !file.IsJson(storage.filePath) {
+		return nil, errors.New("Файл не является JSON")
+	}
+	data, err := file.ReadFile(storage.filePath)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return &bins.BinList{}, nil
-		}
 		return nil, err
 	}
 	var binList bins.BinList
