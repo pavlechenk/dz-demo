@@ -24,6 +24,10 @@ func (storage Storage) GetBins() (*bins.BinList, error) {
 	}
 	data, err := file.ReadFile(storage.filePath)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			emptyList := bins.NewBinList()
+			return &emptyList, nil
+		}
 		return nil, err
 	}
 	var binList bins.BinList
@@ -34,19 +38,18 @@ func (storage Storage) GetBins() (*bins.BinList, error) {
 	return &binList, nil
 }
 
-func (storage Storage) SaveBin(bin *bins.BinList) error {
-	data, err := json.Marshal(bin)
+func (storage Storage) SaveBin(bin *bins.Bin) error {
+	binList, err := storage.GetBins()
 	if err != nil {
 		return err
 	}
-	file, err := os.OpenFile(storage.filePath, os.O_APPEND, os.FileMode(os.O_CREATE))
+	binList.Items = append(binList.Items, *bin)
+	file, err := os.Create(storage.filePath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	_, err = file.WriteString(string(data))
-	if err != nil {
-		return err
-	}
-	return nil
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", " ")
+	return encoder.Encode(binList)
 }
