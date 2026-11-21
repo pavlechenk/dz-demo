@@ -1,7 +1,10 @@
 package main
 
 import (
+	"json-cloud-cli/bins"
 	"json-cloud-cli/storage"
+	"time"
+
 	"github.com/fatih/color"
 )
 
@@ -15,12 +18,30 @@ func NewBinService(repo storage.BinDb) *BinService {
 	}
 }
 
+func (service BinService) GetBins() (*bins.BinList, error) {
+	return service.repo.GetBins()
+}
+
+func (service BinService) SaveBin(bin *bins.Bin) error {
+	return service.repo.SaveBin(bin)
+}
+
 func main() {
 	storageCloud := storage.NewStorageCloud("https://google.com")
 	binService := NewBinService(storageCloud)
-	binList, err := binService.repo.GetBins()
+	_, err := binService.GetBins()
 	if err != nil {
 		color.Red(err.Error())
 	}
-	binService.repo.SaveBin(&binList.Items[0])
+	bin := bins.Bin{
+		Id: "1",
+		Private: false,
+		CreatedAt: time.Now(),
+		Name: "MyBins",
+	}
+	err = binService.SaveBin(&bin)
+	if err != nil {
+		color.Red(err.Error())
+	}
+
 }
