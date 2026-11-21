@@ -8,17 +8,22 @@ import (
 	"os"
 )
 
-type Storage struct {
+type BinDb interface {
+	GetBins() (*bins.BinList, error)
+	SaveBin(bin *bins.Bin) error
+}
+
+type StorageJson struct {
 	filePath string
 }
 
-func NewStorage(dir string) *Storage {
-	return &Storage{
-		filePath: dir,
+func NewStorage(filePath string) *StorageJson {
+	return &StorageJson{
+		filePath: filePath,
 	}
 }
 
-func (storage Storage) GetBins() (*bins.BinList, error) {
+func (storage StorageJson) GetBins() (*bins.BinList, error) {
 	if !file.IsJson(storage.filePath) {
 		return nil, errors.New("Файл не является JSON")
 	}
@@ -38,7 +43,7 @@ func (storage Storage) GetBins() (*bins.BinList, error) {
 	return &binList, nil
 }
 
-func (storage Storage) SaveBin(bin *bins.Bin) error {
+func (storage StorageJson) SaveBin(bin *bins.Bin) error {
 	binList, err := storage.GetBins()
 	if err != nil {
 		return err
